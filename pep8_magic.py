@@ -33,11 +33,11 @@ def pep8(line, cell):
     # remember and replace
     old_stdout = sys.stdout
     # temporary replace
-    sys.stdout = io.BytesIO()
+    sys.stdout = io.StringIO()
     # store code in a file, todo unicode
     with tempfile.NamedTemporaryFile() as f:
         # save to file
-        f.write(cell + "\n")
+        f.write(bytes(cell + '\n', 'UTF-8'))
         # make sure it's written
         f.flush()
         # now we can check the file by name.
