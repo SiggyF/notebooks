@@ -54,6 +54,7 @@ def pep8(line, cell):
         format = '%(row)d:%(col)d: %(code)s %(text)s'
         pep8style = pep8_module.StyleGuide(format=format)
         # check the filename
+        # reusing the file is not allowed under windows
         pep8style.check_files(paths=[f.name])
         # split lines
         stdout = sys.stdout.getvalue().splitlines()
