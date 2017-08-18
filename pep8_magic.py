@@ -7,8 +7,18 @@ import sys
 import tempfile
 import io
 import logging
+import pep8 as pep8_module
+
 
 from IPython.core.magic import register_cell_magic
+
+
+logger = logging.getLogger('pep8')
+if not logging.root.hasHandlers():
+    handler = logging.StreamHandler(stream=sys.stderr)
+    # format = '%(lineno)d: %(msg)s'
+    # handler.setFormatter(logging.Formatter(format))
+    logger.addHandler(handler)
 
 
 def load_ipython_extension(ipython):
@@ -26,8 +36,7 @@ def unload_ipython_extension(ipython):
 @register_cell_magic
 def pep8(line, cell):
     """pep8 cell magic"""
-    import pep8
-    logger = logging.getLogger('pep8')
+
     logger.setLevel(logging.INFO)
     # output is written to stdout
     # remember and replace
@@ -42,7 +51,8 @@ def pep8(line, cell):
         f.flush()
         # now we can check the file by name.
         # we might be able to use 'stdin', have to check implementation
-        pep8style = pep8.StyleGuide()
+        format = '%(row)d:%(col)d: %(code)s %(text)s'
+        pep8style = pep8_module.StyleGuide(format=format)
         # check the filename
         pep8style.check_files(paths=[f.name])
         # split lines
